@@ -4,19 +4,18 @@ from operator import add, mul
 with open('input.txt') as f:
     INTCODES = [int(i) for i in f.read().split(',')]
 
+OPERATORS = {
+    1: add,
+    2: mul
+}
+
 def run_program(intcodes):
     i = 0
-    while i<len(intcodes):
-        if intcodes[i] == 99:
-            break
-        elif intcodes[i] == 1:
-            operator = add
-        elif intcodes[i] == 2:
-            operator = mul
-        else:
-            raise ValueError(f'Opcode expected to be 1 or 2, found {intcodes[i]}')
-        operands = intcodes[intcodes[i+1]], intcodes[intcodes[i+2]]
-        intcodes[intcodes[i+3]] = operator(*operands)
+    while (intcodes[i] != 99 and i<len(intcodes)-4):
+        operator = OPERATORS[intcodes[i]]
+        destination_pointer = intcodes[i+3]
+        operand1, operand2 = intcodes[intcodes[i+1]], intcodes[intcodes[i+2]]
+        intcodes[destination_pointer] = operator(operand1, operand2)
         i+=4
 
     return(intcodes[0])
@@ -35,6 +34,7 @@ def part_2():
             intcodes[1], intcodes[2] = i, j
             if run_program(intcodes) == 19690720:
                 return(100*i+j)
-
+# Part 1: 5110675
+# Part 2: 4847
 print(f'Part 1: {part_1()}')
 print(f'Part 2: {part_2()}')
