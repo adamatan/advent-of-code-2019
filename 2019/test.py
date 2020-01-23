@@ -1,13 +1,16 @@
 import unittest
-from solve import manhattan, solve_step_1, solve_step_2, get_wire_coordinates
+from day_3 import manhattan, solve_step_1, solve_step_2, get_wire_coordinates
+import day_4
 
 class TestDay3(unittest.TestCase):
 
     def test_manhattan(self):
+        '''Sample Manhattan distances'''
         self.assertEqual(manhattan((100, -100)), 200)
         self.assertEqual(manhattan((3, 3)), 6)
 
     def test_solve(self):
+        '''Step 1 and step 2 example solutions'''
         wires = ['R8','U5','L5','D3'], ['U7','R6','D4','L4']
         self.assertEqual( solve_step_1(*wires), 6 )
         
@@ -19,11 +22,28 @@ class TestDay3(unittest.TestCase):
                 ['U98', 'R91', 'D20', 'R16', 'D67', 'R40', 'U7', 'R15', 'U6', 'R7']
         self.assertEqual( solve_step_1(*wires), 135 )
 
-        with open('input.txt') as f:
+        with open('day_3.txt') as f:
             wires = [line.strip().split(',') for line in f]
         
         self.assertEqual( solve_step_1(*wires), 5319 )
         self.assertEqual( solve_step_2(*wires), 122514 )
+
+class TestDay4(unittest.TestCase):
+
+    def test_sorted_passwords(self):
+        self.assertTrue(day_4.is_sorted(111111))
+        self.assertFalse(day_4.has_duplicates(123456))
+
+    def test_password_with_sequence_of_2(self):
+        self.assertFalse(day_4.password_has_sequence_of_2(111222))
+        self.assertTrue(day_4.password_has_sequence_of_2(112222))
+
+    def test_step_1(self):
+        self.assertEqual(day_4.solve_step_1(145852, 616942), 1767)
+
+    def test_step_2(self):
+        self.assertEqual(day_4.solve_step_2(145852, 616942), 1192)
+
 
 if __name__ == '__main__':
     unittest.main()
