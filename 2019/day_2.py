@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-from operator import add, mul
 
-with open('input.txt') as f:
-    INTCODES = [int(i) for i in f.read().split(',')]
+import json
+from operator import add, mul
 
 OPERATORS = {
     1: add,
@@ -20,21 +19,28 @@ def run_program(intcodes):
 
     return(intcodes[0])
 
-def part_1():
-    intcodes = list(INTCODES)
+def solve_step_1(intcodes):
+    cur_intcodes = list(intcodes)
     # "To do this, before running the program, replace position 1 with the 
     # value 12 and replace position 2 with the value 2."
-    intcodes[1], intcodes[2] = 12, 2
-    return run_program(intcodes)
+    cur_intcodes[1], cur_intcodes[2] = 12, 2
+    return run_program(cur_intcodes)
 
-def part_2():
+def solve_step_2(intcodes):
     for i in range(100):
         for j in range(100):
-            intcodes = list(INTCODES)
-            intcodes[1], intcodes[2] = i, j
-            if run_program(intcodes) == 19690720:
+            cur_intcodes = list(intcodes)
+            cur_intcodes[1], cur_intcodes[2] = i, j
+            if run_program(cur_intcodes) == 19690720:
                 return(100*i+j)
-# Part 1: 5110675
-# Part 2: 4847
-print(f'Part 1: {part_1()}')
-print(f'Part 2: {part_2()}')
+
+
+if __name__ == '__main__':
+    with open('day_2.txt') as f:
+        intcodes = [int(i) for i in f.read().split(',')]
+
+    rv = {
+        'step1': solve_step_1(intcodes),
+        'step2': solve_step_2(intcodes)
+    }
+    print(json.dumps(rv, indent=2))
