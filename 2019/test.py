@@ -1,9 +1,6 @@
 import unittest
 import day_1
-<<<<<<< HEAD
 import day_2
-=======
->>>>>>> Add day 1 and its tests
 from day_3 import manhattan, solve_step_1, solve_step_2, get_wire_coordinates
 import day_4
 import day_6
