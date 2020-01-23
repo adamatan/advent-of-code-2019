@@ -29,7 +29,6 @@ class TestDay2(unittest.TestCase):
         self.assertEqual(day_2.solve_step_1(intcodes), 5110675)
         self.assertEqual(day_2.solve_step_2(intcodes), 4847)
 
-
 class TestDay3(unittest.TestCase):
 
     def test_manhattan(self):
