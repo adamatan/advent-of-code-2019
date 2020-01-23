@@ -1,6 +1,7 @@
 import unittest
 import day_1
 import day_2
+import day_2
 from day_3 import manhattan, solve_step_1, solve_step_2, get_wire_coordinates
 import day_4
 import day_6
@@ -29,7 +30,6 @@ class TestDay2(unittest.TestCase):
 
         self.assertEqual(day_2.solve_step_1(intcodes), 5110675)
         self.assertEqual(day_2.solve_step_2(intcodes), 4847)
-
 
 class TestDay3(unittest.TestCase):
 
