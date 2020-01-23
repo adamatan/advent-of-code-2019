@@ -1,9 +1,11 @@
 import unittest
+import io
 import day_1
 import day_2
 import day_2
 from day_3 import manhattan, solve_step_1, solve_step_2, get_wire_coordinates
 import day_4
+import day_5
 import day_6
 
 class TestDay1(unittest.TestCase):
@@ -75,6 +77,100 @@ class TestDay4(unittest.TestCase):
         self.assertEqual(day_4.solve_step_2(145852, 616942), 1192)
 
 
+class TestDay5(unittest.TestCase):
+
+    IMMEDIATE_MODE_INPUT = (3, 3, 1105, -1, 9, 1101, 0, 0, 12, 4, 12, 99, 1)
+    POSITION_MODE_INPUT = [3, 12, 6, 12, 15, 1, 13, 14, 13, 4, 13, 99, -1, 0, 1, 9]
+    LONG_INPUT = (3, 21, 1008, 21, 8, 20, 1005, 20, 22, 107, 8, 21, 20, 1006, 
+                  20, 31, 1106, 0, 36, 98, 0, 0, 1002, 21, 125, 20, 4, 20, 1105,
+                  1, 46, 104, 999, 1105, 1, 46, 1101, 1000, 1, 20, 4, 20, 1105, 1, 46, 98, 99)
+
+    def test_get_operands(self):
+        intcodes = [2, 4, 3, 4, 33]
+        operands = day_5.get_operands(intcodes, 1, [1, 1, 0], 3)
+        expected = [4, 3, 33]
+        self.assertListEqual(operands, expected)
+
+    def test_parse_opcode_and_modes(self):
+        opcode, modes = day_5.parse_opcode_and_modes(2)
+        self.assertEqual(opcode, 2)
+        self.assertListEqual(modes, [0, 0, 0])
+
+        opcode, modes = day_5.parse_opcode_and_modes(1002)
+        self.assertEqual(opcode, 2)
+        self.assertListEqual(modes, [0, 1, 0])
+
+        opcode, modes = day_5.parse_opcode_and_modes(1102)
+        self.assertEqual(opcode, 2)
+        self.assertListEqual(modes, [1, 1, 0])
+
+    def test_opcode_5_01(self):
+        intcodes = (1105, 1, 5, 99, 0, 104, 100, 99)
+        self.run_day_5_program(list(intcodes), '', 100)
+
+    def test_opcode_5_02(self):
+        intcodes = (1105, 0, 5, 104, 200, 99)
+        self.run_day_5_program(list(intcodes), '', 200)
+
+    def test_opcode_6_01(self):
+        intcodes = (1106, 1, 5, 104, 555, 99)
+        self.run_day_5_program(list(intcodes), '', 555)
+
+    def test_opcode_6_02(self):
+        intcodes = (1106, 1, 5, 104, 777, 99)
+        self.run_day_5_program(list(intcodes), '', 777)
+
+    def test_opcode_7_true(self):
+        '''Opcode 7 (less than) - store 1 in intcodes[op3] if op1 < op2'''
+        intcodes = [11107, 1, 5, 7, 104, 555, 99, 104, 666, 99]
+        self.run_day_5_program(intcodes, '', 555)
+        self.assertEqual(intcodes[7], 1)
+
+    def test_opcode_7_false(self):
+        '''Opcode 7 (less than) - store 0 in intcodes[op3] if not (op1 < op2)'''
+        intcodes = [11107, 5, 1, 7, 104, 555, 99, 104, 666, 99]
+        self.run_day_5_program(intcodes, '', 555)
+        self.assertEqual(intcodes[7], 0)
+
+    def test_opcode_8_true(self):
+        '''Opcode 8 (equals) - store 1 in intcodes[op3] if op1 == op2'''
+        intcodes = [11108, 1, 1, 7, 104, 555, 99, 104, 666, 99]
+        self.run_day_5_program(intcodes, '', 555)
+        self.assertEqual(intcodes[7], 1)
+
+    def test_opcode_8_false(self):
+        '''Opcode 8 (equals) - store 0 in intcodes[op3] if op1 != op2'''
+        intcodes = [11108, 1, 2, 7, 104, 555, 99, 104, 666, 99]
+        self.run_day_5_program(intcodes, '', 555)
+        self.assertEqual(intcodes[7], 0)
+
+    def run_day_5_program(self, intcodes, input_lines, expected_output):
+        stdin = io.StringIO(input_lines) if input_lines else io.StringIO('')
+        stdout = io.StringIO()
+        day_5.run(intcodes, stdin, stdout)
+        self.assertEqual(int(stdout.getvalue()), expected_output)
+
+    def test_step_2_01(self):
+        self.run_day_5_program(list(self.IMMEDIATE_MODE_INPUT), '0', 0)
+
+    def test_step_2_02(self):
+        self.run_day_5_program(list(self.IMMEDIATE_MODE_INPUT), '10', 1)
+
+    def test_step_2_03(self):
+        self.run_day_5_program(list(self.POSITION_MODE_INPUT), '0', 0)
+
+    def test_step_2_04(self):
+        self.run_day_5_program(list(self.POSITION_MODE_INPUT), '10', 1)
+
+    def test_step_2_05(self):
+        self.run_day_5_program(list(self.LONG_INPUT), '3', 999)
+
+    def test_step_2_06(self):
+        self.run_day_5_program(list(self.LONG_INPUT), '8', 1000)
+
+    def test_step_2_07(self):
+        self.run_day_5_program(list(self.LONG_INPUT), '745', 1001)
+
 class TestDay6(unittest.TestCase):
 
     STEP_1_SAMPLE_DATA = ['COM)B', 'B)C', 'C)D', 'D)E', 'E)F', 'B)G', 'G)H', 'D)I', 'E)J', 'J)K', 'K)L']
@@ -101,6 +197,7 @@ class TestDay6(unittest.TestCase):
         input_data = day_6.get_input_data(day_6.INPUT_FILENAME)
         _, symmetric_orbits = day_6.parse(input_data)
         self.assertEqual(day_6.bfs(symmetric_orbits, 'YOU', 'SAN'), 430)
+
 
 
 if __name__ == '__main__':
