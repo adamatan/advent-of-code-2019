@@ -1,6 +1,23 @@
 import unittest
+import day_1
 from day_3 import manhattan, solve_step_1, solve_step_2, get_wire_coordinates
 import day_4
+
+class TestDay1(unittest.TestCase):
+
+    def test_step_1(self):
+        '''Fuel intakes - step 1'''
+        self.assertEqual(day_1.solve_step_1([12]),      2)
+        self.assertEqual(day_1.solve_step_1([14]),      2)
+        self.assertEqual(day_1.solve_step_1([1969]),    654)
+        self.assertEqual(day_1.solve_step_1([100756]),  33583)
+
+    def test_step_2(self):
+        '''Fuel intakes - step 2'''
+        self.assertEqual(day_1.solve_step_2([14]),      2)
+        self.assertEqual(day_1.solve_step_2([1969]),    966)
+        self.assertEqual(day_1.solve_step_2([100756]),  50346)
+
 
 class TestDay3(unittest.TestCase):
 
