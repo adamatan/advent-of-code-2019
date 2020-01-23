@@ -1,5 +1,6 @@
 import unittest
 import day_1
+import day_2
 from day_3 import manhattan, solve_step_1, solve_step_2, get_wire_coordinates
 import day_4
 
@@ -17,6 +18,17 @@ class TestDay1(unittest.TestCase):
         self.assertEqual(day_1.solve_step_2([14]),      2)
         self.assertEqual(day_1.solve_step_2([1969]),    966)
         self.assertEqual(day_1.solve_step_2([100756]),  50346)
+
+
+class TestDay2(unittest.TestCase):
+
+    def test_intcodes(self):
+        with open('day_2.txt') as f:
+            intcodes = [int(i) for i in f.read().split(',')]
+
+        self.assertEqual(day_2.solve_step_1(intcodes), 5110675)
+        self.assertEqual(day_2.solve_step_2(intcodes), 4847)
+
 
 
 class TestDay3(unittest.TestCase):
