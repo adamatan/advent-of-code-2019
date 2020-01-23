@@ -3,6 +3,7 @@
 Solves "Day 3: Crossed Wires" from adventofcode.com.
 '''
 
+import json
 from operator import add
 
 def get_wire_coordinates(wire):
@@ -52,6 +53,10 @@ def solve_step_2(wire_1, wire_2):
     return(min(distances))
     
 if __name__ == '__main__':
-    with open('input.txt') as f:
+    with open('day_3.txt') as f:
         WIRES = [line.strip().split(',') for line in f]
-    print(solve_step_1(*WIRES))
+    rv = {
+        'step1': solve_step_1(*WIRES),
+        'step2': solve_step_2(*WIRES)
+    }
+    print(json.dumps(rv, indent=2))
