@@ -8,6 +8,10 @@ def solve_step_1(lines):
     return (sum(fuel_intakes))
 
 def calculate_fuel_intake_step_2(mass):
+<<<<<<< HEAD
+=======
+    print(mass)
+>>>>>>> Add day 1 and its tests
     if mass > 0:
         return max(0, mass//3-2 + calculate_fuel_intake_step_2(mass//3-2))
     return 0
