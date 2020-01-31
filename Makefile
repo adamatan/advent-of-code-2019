@@ -2,7 +2,7 @@ PWD := $(shell pwd)
 DOCKER = docker run -it \
         --rm \
 		--mount type=bind,source=$(PWD),target=/app \
-		--name advent-of-code \
+		--name $@ \
 		python:3.8-alpine \
 
 test:
