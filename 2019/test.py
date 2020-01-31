@@ -1,7 +1,8 @@
 import unittest
+import io
 import day_1
 import day_2
-from day_3 import manhattan, solve_step_1, solve_step_2, get_wire_coordinates
+from day_3 import manhattan, solve_step_1, solve_step_2
 import day_4
 import day_5
 
@@ -94,6 +95,43 @@ class TestDay5(unittest.TestCase):
         opcode, modes = day_5.parse_opcode_and_modes(1102)
         self.assertEqual(opcode, 2)
         self.assertListEqual(modes, [1, 1, 0])
+
+    def test_step_2(self):
+        cases = [
+            {
+                'intcodes': [3, 3, 1105, -1, 9, 1101, 0, 0, 12, 4, 12, 99, 1],
+                'input': '0',
+                'expected': 0
+            },
+            {
+                'intcodes': [3, 3, 1105, -1, 9, 1101, 0, 0, 12, 4, 12, 99, 1],
+                'input': '10',
+                'expected': 1
+            },
+            {
+                'intcodes': [3, 12, 6, 12, 15, 1, 13, 14, 13, 4, 13, 99, -1, 0, 1, 9],
+                'input': '0',
+                'expected': 0
+            },
+            {
+                'intcodes': [3, 12, 6, 12, 15, 1, 13, 14, 13, 4, 13, 99, -1, 0, 1, 9],
+                'input': '10',
+                'expected': 1
+            },
+            {
+                'intcodes': [3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31, 1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104, 999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99],
+                'input': '3',
+                'expected': 1001
+            }
+        ]
+        for case in cases:
+            print(case)
+            stdin = io.StringIO(case['input'])
+            stdout = io.StringIO()
+            intcodes = case['intcodes']
+            day_5.run(intcodes, stdin, stdout)
+            self.assertEqual(int(stdout.getvalue()), case['expected'])
+
 
 
 if __name__ == '__main__':
