@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import io
-import json
 from operator import add, mul
 import sys
 import logging
@@ -68,6 +67,6 @@ def run(opcodes, stdin=sys.stdin, stdout=sys.stdout):
 if __name__ == '__main__':
     with open('day_5.txt') as f:
         intcodes = f.read().split(',')
-        intcodes = [int (i) for i in intcodes]
+        intcodes = [int(i) for i in intcodes]
         stdin = io.StringIO('1')
         run(intcodes, stdin=stdin)
