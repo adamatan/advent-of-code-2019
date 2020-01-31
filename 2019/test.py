@@ -3,6 +3,7 @@ import day_1
 import day_2
 from day_3 import manhattan, solve_step_1, solve_step_2, get_wire_coordinates
 import day_4
+import day_5
 
 class TestDay1(unittest.TestCase):
 
@@ -71,6 +72,28 @@ class TestDay4(unittest.TestCase):
 
     def test_step_2(self):
         self.assertEqual(day_4.solve_step_2(145852, 616942), 1192)
+
+
+class TestDay5(unittest.TestCase):
+
+    def test_get_operands(self):
+        intcodes = [2, 4, 3, 4, 33]
+        operands = day_5.get_operands(intcodes, 1, [1, 1, 0], 3)
+        expected = [4, 3, 33]
+        self.assertListEqual(operands, expected)
+
+    def test_parse_opcode_and_modes(self):
+        opcode, modes = day_5.parse_opcode_and_modes(2)
+        self.assertEqual(opcode, 2)
+        self.assertListEqual(modes, [0, 0, 0])
+
+        opcode, modes = day_5.parse_opcode_and_modes(1002)
+        self.assertEqual(opcode, 2)
+        self.assertListEqual(modes, [0, 1, 0])
+
+        opcode, modes = day_5.parse_opcode_and_modes(1102)
+        self.assertEqual(opcode, 2)
+        self.assertListEqual(modes, [1, 1, 0])
 
 
 if __name__ == '__main__':
