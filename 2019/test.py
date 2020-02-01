@@ -77,6 +77,12 @@ class TestDay4(unittest.TestCase):
 
 class TestDay5(unittest.TestCase):
 
+    IMMEDIATE_MODE_INPUT = (3, 3, 1105, -1, 9, 1101, 0, 0, 12, 4, 12, 99, 1)
+    POSITION_MODE_INPUT = [3, 12, 6, 12, 15, 1, 13, 14, 13, 4, 13, 99, -1, 0, 1, 9]
+    LONG_INPUT = (3, 21, 1008, 21, 8, 20, 1005, 20, 22, 107, 8, 21, 20, 1006, 
+                    20, 31, 1106, 0, 36, 98, 0, 0, 1002, 21, 125, 20, 4, 20, 1105,
+                    1, 46, 104, 999, 1105, 1, 46, 1101, 1000, 1, 20, 4, 20, 1105, 1, 46, 98, 99)
+
     def test_get_operands(self):
         intcodes = [2, 4, 3, 4, 33]
         operands = day_5.get_operands(intcodes, 1, [1, 1, 0], 3)
@@ -96,43 +102,32 @@ class TestDay5(unittest.TestCase):
         self.assertEqual(opcode, 2)
         self.assertListEqual(modes, [1, 1, 0])
 
-    def test_step_2(self):
-        cases = [
-            {
-                'intcodes': [3, 3, 1105, -1, 9, 1101, 0, 0, 12, 4, 12, 99, 1],
-                'input': '0',
-                'expected': 0
-            },
-            {
-                'intcodes': [3, 3, 1105, -1, 9, 1101, 0, 0, 12, 4, 12, 99, 1],
-                'input': '10',
-                'expected': 1
-            },
-            {
-                'intcodes': [3, 12, 6, 12, 15, 1, 13, 14, 13, 4, 13, 99, -1, 0, 1, 9],
-                'input': '0',
-                'expected': 0
-            },
-            {
-                'intcodes': [3, 12, 6, 12, 15, 1, 13, 14, 13, 4, 13, 99, -1, 0, 1, 9],
-                'input': '10',
-                'expected': 1
-            },
-            {
-                'intcodes': [3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31, 1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104, 999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99],
-                'input': '3',
-                'expected': 1001
-            }
-        ]
-        for case in cases:
-            print(case)
-            stdin = io.StringIO(case['input'])
-            stdout = io.StringIO()
-            intcodes = case['intcodes']
-            day_5.run(intcodes, stdin, stdout)
-            self.assertEqual(int(stdout.getvalue()), case['expected'])
+    def run_day_5_program(self, intcodes, input, expected_output):
+        stdin = io.StringIO(input)
+        stdout = io.StringIO()
+        day_5.run(intcodes, stdin, stdout)
+        self.assertEqual(int(stdout.getvalue()), expected_output)
 
+    def test_step_2_01(self):
+        self.run_day_5_program(list(self.IMMEDIATE_MODE_INPUT), '0', 0)
 
+    def test_step_2_02(self):
+        self.run_day_5_program(list(self.IMMEDIATE_MODE_INPUT), '10', 1)
+
+    def test_step_2_03(self):
+        self.run_day_5_program(list(self.POSITION_MODE_INPUT), '0', 0)
+
+    def test_step_2_04(self):
+        self.run_day_5_program(list(self.POSITION_MODE_INPUT), '10', 1)
+
+    def test_step_2_05(self):
+        self.run_day_5_program(list(self.LONG_INPUT), '3', 999)
+
+    def test_step_2_06(self):
+        self.run_day_5_program(list(self.LONG_INPUT), '8', 1000)
+
+    def test_step_2_07(self):
+        self.run_day_5_program(list(self.LONG_INPUT), '745', 1001)
 
 if __name__ == '__main__':
     unittest.main()
