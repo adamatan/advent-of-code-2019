@@ -80,8 +80,8 @@ class TestDay5(unittest.TestCase):
     IMMEDIATE_MODE_INPUT = (3, 3, 1105, -1, 9, 1101, 0, 0, 12, 4, 12, 99, 1)
     POSITION_MODE_INPUT = [3, 12, 6, 12, 15, 1, 13, 14, 13, 4, 13, 99, -1, 0, 1, 9]
     LONG_INPUT = (3, 21, 1008, 21, 8, 20, 1005, 20, 22, 107, 8, 21, 20, 1006, 
-                    20, 31, 1106, 0, 36, 98, 0, 0, 1002, 21, 125, 20, 4, 20, 1105,
-                    1, 46, 104, 999, 1105, 1, 46, 1101, 1000, 1, 20, 4, 20, 1105, 1, 46, 98, 99)
+                  20, 31, 1106, 0, 36, 98, 0, 0, 1002, 21, 125, 20, 4, 20, 1105,
+                  1, 46, 104, 999, 1105, 1, 46, 1101, 1000, 1, 20, 4, 20, 1105, 1, 46, 98, 99)
 
     def test_get_operands(self):
         intcodes = [2, 4, 3, 4, 33]
@@ -102,8 +102,48 @@ class TestDay5(unittest.TestCase):
         self.assertEqual(opcode, 2)
         self.assertListEqual(modes, [1, 1, 0])
 
-    def run_day_5_program(self, intcodes, input, expected_output):
-        stdin = io.StringIO(input)
+    def test_opcode_5_01(self):
+        intcodes = (1105, 1, 5, 99, 0, 104, 100, 99)
+        self.run_day_5_program(list(intcodes), '', 100)
+
+    def test_opcode_5_02(self):
+        intcodes = (1105, 0, 5, 104, 200, 99)
+        self.run_day_5_program(list(intcodes), '', 200)
+
+    def test_opcode_6_01(self):
+        intcodes = (1106, 1, 5, 104, 555, 99)
+        self.run_day_5_program(list(intcodes), '', 555)
+
+    def test_opcode_6_02(self):
+        intcodes = (1106, 1, 5, 104, 777, 99)
+        self.run_day_5_program(list(intcodes), '', 777)
+
+    def test_opcode_7_true(self):
+        '''Opcode 7 (less than) - store 1 in intcodes[op3] if op1 < op2'''
+        intcodes = [11107, 1, 5, 7, 104, 555, 99, 104, 666, 99]
+        self.run_day_5_program(intcodes, '', 555)
+        self.assertEqual(intcodes[7], 1)
+
+    def test_opcode_7_false(self):
+        '''Opcode 7 (less than) - store 0 in intcodes[op3] if not (op1 < op2)'''
+        intcodes = [11107, 5, 1, 7, 104, 555, 99, 104, 666, 99]
+        self.run_day_5_program(intcodes, '', 555)
+        self.assertEqual(intcodes[7], 0)
+
+    def test_opcode_8_true(self):
+        '''Opcode 8 (equals) - store 1 in intcodes[op3] if op1 == op2'''
+        intcodes = [11108, 1, 1, 7, 104, 555, 99, 104, 666, 99]
+        self.run_day_5_program(intcodes, '', 555)
+        self.assertEqual(intcodes[7], 1)
+
+    def test_opcode_8_false(self):
+        '''Opcode 8 (equals) - store 0 in intcodes[op3] if op1 != op2'''
+        intcodes = [11108, 1, 2, 7, 104, 555, 99, 104, 666, 99]
+        self.run_day_5_program(intcodes, '', 555)
+        self.assertEqual(intcodes[7], 0)
+
+    def run_day_5_program(self, intcodes, input_lines, expected_output):
+        stdin = io.StringIO(input_lines) if input_lines else io.StringIO('')
         stdout = io.StringIO()
         day_5.run(intcodes, stdin, stdout)
         self.assertEqual(int(stdout.getvalue()), expected_output)

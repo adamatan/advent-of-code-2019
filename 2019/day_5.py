@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import io
-from operator import add, mul, le, eq
+from operator import add, mul, lt, eq
 import sys
 import logging
 import json
@@ -9,7 +9,7 @@ import json
 logger = logging.getLogger('root')
 FORMAT = "[%(funcName)30s() ]   %(message)s"
 logging.basicConfig(format=FORMAT)
-logger.setLevel(logging.ERROR)
+logger.setLevel(logging.DEBUG)
 
 
 def parse_opcode_and_modes(operator):
@@ -41,9 +41,8 @@ def get_operands(intcodes, ptr, modes, count):
 def run(intcodes, stdin=sys.stdin, stdout=sys.stdout):
     ptr = 0
     while (operator := intcodes[ptr]) != 99 and (ptr < len(intcodes)):
-        logger.info(f'ptr: {ptr}, codes [{ptr}:{ptr+10}]: {str(intcodes[ptr:ptr+10])}')
-        logger.debug(f'ptr: {ptr}, intcodes[ptr]: {intcodes[ptr]}')
         opcode, modes = parse_opcode_and_modes(operator)
+        logger.info(f'NEW CYCLE: ptr: {ptr}, intcodes[ptr]: {intcodes[ptr]}, codes [{ptr}:{ptr+10}]: {str(intcodes[ptr:ptr+10])}')
         if opcode in (1, 2):
             op = mul if opcode == 2 else add
             operands = get_operands(intcodes, ptr+1, modes, 2)
@@ -63,24 +62,22 @@ def run(intcodes, stdin=sys.stdin, stdout=sys.stdout):
             stdout.write(str(operands[0])+'\n')
             ptr += 2
         elif opcode in(5, 6):
-            predicate = True if opcode == 5 else False
+            predicate = opcode == 5
             operands = get_operands(intcodes, ptr+1, modes, 2)
             logger.debug(f'<5,6> intcodes: {str(intcodes[ptr:ptr+2]):<20} Operands: {operands}')
             if bool(operands[0]) == predicate:
                 ptr = operands[1]
+                logger.debug(f'ptr set to {ptr}, value is {intcodes[ptr]}')
             else:
                 ptr += 3
         elif opcode in(7, 8):
-            operator = le if opcode ==7 else eq
+            operator = lt if opcode == 7 else eq
             operands = get_operands(intcodes, ptr+1, modes, 3)
             logger.debug(f'<7,8> intcodes: {str(intcodes[ptr:ptr+3]):<20} Operands: {operands}')
-            if operator(operands[0], operands[1]):
-                ptr = operands[2]
-            else:
-                ptr += 4
-
+            intcodes[operands[2]] = 1 if operator(operands[0], operands[1]) else 0
+            ptr += 4
         else:
-            break
+            raise ValueError(f'Opcode {opcode} is unknown')
 
 def parse_intcodes(filename):
     with open(filename) as f:
@@ -95,18 +92,16 @@ def run_step_1(intcodes):
     return int(stdout.getvalue().split()[-1])
 
 def run_step_2(intcodes):
-    stdin = io.StringIO('0')
+    stdin = io.StringIO('5')
     stdout = io.StringIO()
     run(intcodes, stdin=stdin, stdout=stdout)
-    step_2 = int(stdout.getvalue().split()[-1])
-    return step_2
+    return int(stdout.getvalue().split()[-1])
 
 if __name__ == '__main__':
     FILENAME = 'day_5.txt'
-    intcodes = parse_intcodes(FILENAME)
-    intcodes = [3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9]
+    file_intcodes = parse_intcodes(FILENAME)
     rv = {
-        'step1': run_step_1(intcodes),
-        'step2': run_step_2(intcodes)
+        'step1': run_step_1(list(file_intcodes)),
+        'step2': run_step_2(list(file_intcodes))
     }
     print(json.dumps(rv, indent=2))
