@@ -1,9 +1,11 @@
 import unittest
+import hashlib
 import day_1
 import day_2
 from day_3 import manhattan, solve_step_1, solve_step_2, get_wire_coordinates
 import day_4
 import day_6
+import day_8
 
 class TestDay1(unittest.TestCase):
 
@@ -22,7 +24,6 @@ class TestDay1(unittest.TestCase):
 
 
 class TestDay2(unittest.TestCase):
-
     def test_intcodes(self):
         with open('day_2.txt') as f:
             intcodes = [int(i) for i in f.read().split(',')]
@@ -102,6 +103,27 @@ class TestDay6(unittest.TestCase):
         _, symmetric_orbits = day_6.parse(input_data)
         self.assertEqual(day_6.bfs(symmetric_orbits, 'YOU', 'SAN'), 430)
 
+class TestDay8(unittest.TestCase):
+    def test_step_1(self):
+        '''Test step 1 with the file input'''
+        pixels = day_8.parse_input()
+        actual = day_8.solve_step_1(pixels, day_8.INPUT_HEIGHT, day_8.INPUT_WIDTH)
+        expected = 1452
+        self.assertEqual(actual, expected)
+
+    def test_layer_merge(self):
+        '''Test layer merge with a small example'''
+        test_input = ['0', '2', '2', '2', '1', '1', '2', '2', '2', '2', '1', '2', '0', '0', '0', '0']
+        actual_image = day_8.merge_layers(test_input, 2, 2)
+        expected_image = ['0', '1', '1', '0']
+        self.assertEqual(actual_image, expected_image)
+
+    def test_step_2(self):
+        pixels = day_8.parse_input()
+        actual = day_8.solve_step_2(pixels, day_8.INPUT_HEIGHT, day_8.INPUT_WIDTH)
+        actual_hash = hashlib.sha256(''.join(tuple(actual)).encode()).hexdigest()
+        expected_hash = 'e356894b6073bed46eeccde6e56075a4e16f760efcd432188f15b26757210e89'
+        self.assertEqual(actual_hash, expected_hash)
 
 if __name__ == '__main__':
     unittest.main()
