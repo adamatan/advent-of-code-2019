@@ -6,7 +6,10 @@ DOCKER = docker run -it \
 		python:3.8-alpine \
 
 test:
-	$(DOCKER) sh -c 'cd /app/2019; python test.py -v TestDay8'
+	$(DOCKER) sh -c 'cd /app/2019; python test.py'
+
+TestDay%:
+	$(DOCKER) sh -c 'cd /app/2019; python test.py -v $@'
 
 day_%:
 	$(DOCKER) sh -c 'cd /app/2019; python $@.py'
