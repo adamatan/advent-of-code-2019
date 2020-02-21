@@ -6,6 +6,7 @@ from day_3 import manhattan, solve_step_1, solve_step_2, get_wire_coordinates
 import day_4
 import day_6
 import day_8
+import day_10
 
 class TestDay1(unittest.TestCase):
 
@@ -124,6 +125,12 @@ class TestDay8(unittest.TestCase):
         actual_hash = hashlib.sha256(''.join(tuple(actual)).encode()).hexdigest()
         expected_hash = 'e356894b6073bed46eeccde6e56075a4e16f760efcd432188f15b26757210e89'
         self.assertEqual(actual_hash, expected_hash)
+
+class TestDay10(unittest.TestCase):
+    def test_step_1_and_2(self):
+        '''Black-box test the steps with the expected solutions'''
+        solution = day_10.solve()
+        self.assertEqual(solution['step_1'], 253)
 
 if __name__ == '__main__':
     unittest.main()

@@ -119,10 +119,10 @@ include-naming-hint=no
 property-classes=abc.abstractproperty
 
 # Regular expression matching correct variable names
-variable-rgx=[a-z_][a-z0-9_]{2,35}$
+variable-rgx=[a-z_][a-z0-9_]{,35}$
 
 # Naming hint for variable names
-variable-name-hint=[a-z_][a-z0-9_]{2,35}$
+variable-name-hint=[a-z_][a-z0-9_]{,35}$
 
 # Regular expression matching correct class attribute names
 class-attribute-rgx=([A-Za-z_][A-Za-z0-9_]{2,30}|(__.*__))$
