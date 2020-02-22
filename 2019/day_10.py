@@ -7,8 +7,7 @@ See https://adventofcode.com/2019/day/10
 
 import math
 import json
-
-FILENAME = 'day_10.txt'
+from util import read_input_file
 
 def parse_input(input_string):
     '''Parses the input multi-line string into a list of (x,y) tuples
@@ -16,7 +15,7 @@ def parse_input(input_string):
     The top leftmost spot is (0, 0), the spot next to it to thr right
     is (1, 0)'''
     astroid_list = list()
-    for y, line in enumerate(input_string.splitlines()):
+    for y, line in enumerate(input_string):
         for x, char in enumerate(line.strip()):
             if char == '#':
                 astroid_list.append((x, y))
@@ -42,18 +41,11 @@ def count_visible_neighbours(origin_astroid, astroids_list):
         angles.add(angle)
     return len(angles)
 
-def read_input_file():
-    '''Parse the riddle input file'''
-    with open(FILENAME) as f:
-        return f.read()
-
 def solve_step_1(astroids):
-    '''Solve the first part of the riddle'''
     return max([count_visible_neighbours(astroid, astroids) for astroid in astroids])
 
 def solve():
-    '''Solve both parts of the riddle'''
-    input_file_string = read_input_file()
+    input_file_string = read_input_file(10)
     astroids = parse_input(input_file_string)
     return {
         'step_1': solve_step_1(astroids)
