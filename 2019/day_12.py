@@ -11,7 +11,7 @@ class Moon(object):
         self.velocity = [0, 0, 0]
 
     def apply_velocity(self):
-        self.position = [p+v for p,v in zip(self.position, self.velocity)]
+        self.position = [p+v for p, v in zip(self.position, self.velocity)]
 
     def set_gravity(self, other_moons):
         for other_moon in other_moons:
@@ -35,30 +35,37 @@ class Moon(object):
                     f'y={self.velocity[1]:3}, '+\
                     f'z={self.velocity[2]:3}>'
 
-moons_1 = (
-    Moon(-1, 0, 2),
-    Moon(2, -10, -7),
-    Moon(4, -8, 8),
-    Moon(3, 5, -1)
-)
+    @classmethod
+    def apply_step(cls, moons):
+        for moon in moons:
+            moon.set_gravity(moons)
+        for moon in moons:
+            moon.apply_velocity()
 
-moons_2 = (
-    Moon(-8, -10, 0),
-    Moon(5, 7, 10),
-    Moon(2, -7, 3),
-    Moon(9, -8, -3)
-)
 
-moons = moons_2
+def run_examples():
+    moons_1 = (
+        Moon(-1, 0, 2),
+        Moon(2, -10, -7),
+        Moon(4, -8, 8),
+        Moon(3, 5, -1)
+    )
 
-for step in range(101):
-    print(f'After step {step}')
-    for moon in moons:
-        print(moon)
-    for moon in moons:
-        others = (other for other in moons if other != moon)
-        moon.set_gravity(others)
-    for moon in moons:
-        moon.apply_velocity()
+    moons_2 = (
+        Moon(-8, -10, 0),
+        Moon(5, 7, 10),
+        Moon(2, -7, 3),
+        Moon(9, -8, -3)
+    )
 
-print(sum([moon.energy for moon in moons]))
+    moons = moons_1
+
+    for step in range(10):
+        print(f'After step {step}')
+        for moon in moons:
+            print(moon)
+        Moon.apply_step(moons)
+    print(sum([moon.energy for moon in moons]))
+
+if __name__ == '__main__':
+    run_examples()

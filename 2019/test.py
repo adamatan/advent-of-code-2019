@@ -7,6 +7,7 @@ import day_4
 import day_6
 import day_8
 import day_10
+import day_12
 
 class TestDay1(unittest.TestCase):
 
@@ -131,6 +132,23 @@ class TestDay10(unittest.TestCase):
         '''Black-box test the steps with the expected solutions'''
         solution = day_10.solve()
         self.assertEqual(solution['step_1'], 253)
+
+class TestDay12(unittest.TestCase):
+    def test_example_1(self):
+        moons = (
+            day_12.Moon(-1, 0, 2),
+            day_12.Moon(2, -10, -7),
+            day_12.Moon(4, -8, 8),
+            day_12.Moon(3, 5, -1)
+        )
+        for _ in range(10):
+            day_12.Moon.apply_step(moons)
+        expected_energy = 179
+        actual_energy = sum([moon.energy for moon in moons])
+        self.assertEqual(expected_energy, actual_energy)
+
+
+
 
 if __name__ == '__main__':
     unittest.main()
