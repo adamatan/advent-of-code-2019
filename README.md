@@ -13,7 +13,7 @@
            --mount type=bind,source=$(pwd),target=/app \
            --name advent-of-code \
            python:3.8-alpine \
-           sh -c 'cd /app/2019; python day_<number>.py
+           sh -c 'cd /app/2019; python day_<number>.py'
 
 ## Testing
 
